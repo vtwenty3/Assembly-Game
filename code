@@ -1,0 +1,89 @@
+MOV R1, #BIGGER
+MOV R2, #SMALLER 
+MOV R3, #SAME
+MOV R7, #ERR
+MOV R10, #CARDS
+					//putting all needed strings in different registers
+
+MOV R8, #1
+MOV R6, #13
+					//Load the correct lowest and highest value
+
+INP R4, 2 				//requesting a number from theuser
+LDR R11, [R4 + CARDS] 			// combining the user input with the proper card
+CMP R4, R8 				//compare the numbers
+BLT GOTOERR 				// print error message if values are not correct
+CMP R4, R6 				// check if the values are correct
+BGT GOTOERR 				// print error message if the values are not correct
+INP R5, 2 				// request 2nd input
+LDR R12, [R5 + CARDS]
+CMP R5, R8 
+BLT GOTOERR
+CMP R5, R6
+BGT GOTOERR
+CMP R4, R5
+					//basicly the same thing for the 2nd input
+BLT GOTOSMALLER				//condition if true go to GOTOSMALLER
+BEQ GOTOSAME				//same go to GOTOSAME
+OUT R11, 7 				// output the first card
+OUT R1, 8 				//output R1
+OUT R12, 7 				// output the second card
+HALT 					// stop
+BIGGER: 				// String
+DAT 0x20534920
+DAT 0x48474948
+DAT 0x54205245
+DAT 0x204e4148
+HALT
+
+SMALLER: 				// String
+DAT 0x20534920	
+DAT 0x45574f4c
+DAT 0x48542052
+DAT 0x00204e41
+
+GOTOSMALLER:
+OUT R11, 7
+OUT R2,8
+OUT R12, 7
+HALT
+
+SAME: //String
+DAT 0x20534920
+DAT 0x41555145
+DAT 0x4f54204c
+DAT 0x00000020
+
+GOTOSAME:
+OUT R11, 7
+OUT R3, 8
+OUT R12, 7
+HALT
+
+		ERR: 			 //String
+DAT 0x20657355
+DAT 0x796c6e6f
+DAT 0x74203120
+DAT 0x3331206f
+DAT 0x21000000
+
+		CARDS:
+DAT 0x00
+DAT 0x41 // A
+DAT 0x32 // 2
+DAT 0x33 // 3
+DAT 0x34 // 4
+DAT 0x35 // 5
+DAT 0x36 // 6
+DAT 0x37 // 7
+DAT 0x38 // 8
+DAT 0x39 // 9
+DAT 0x3031 // 10
+DAT 0x4A // J
+DAT 0x51 // Q
+DAT 0x4B // K
+
+GOTOERR:
+OUT R7, 8				//Output the string in R7
+
+HALT
